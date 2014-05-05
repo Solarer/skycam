@@ -1,0 +1,69 @@
+#-----Beschriftungen-----#
+set terminal pdf
+set title ""
+set xlabel "X [Pixel]"
+set ylabel "Y [Pixel]"
+
+set key top right 
+set output 'pic_circle_fit.pdf'
+
+
+#-----Formatierung-----#
+set grid
+#set xrange [0:300]
+#set yrange [0.0:100.5]
+#set logscale x
+#set logscale y
+
+
+
+#-----Konstanten definieren-----#
+pi=3.1415926
+
+
+#-----Rechenfunktionen-----#
+
+
+#-----Fitfunktion-----#
+f(x,y)=(x-a)**2+(y-b)**2
+a=200
+b=200
+c=200
+
+#-----Fitting-----#
+#fit f(x) "star_data" index 0 using ($1):($2) via a,b,c,d
+fit f(x,y) "circle_data" index 0 using ($2):($1) via a,b,c
+
+#fit f(x) "daten" index 1 using (($2)/1000):($1) via a,b
+#fit f(x) "daten" index 2 using (($2)/1000):($1) via a,b
+
+#fit p(x) "daten" index 0 using ($1/($2/1000)):($1*($2/1000)) via a,b,c
+
+#-----Plot-----#
+#Monozelle
+splot "circle_data" index 0 using ($2):($1) title "Werte",f(x,y) title "linear Regression"
+
+#Rechteckspannung
+#plot "daten" index 1 using (($2)/1000):($1) title "Strom gegen Spannung", f(x) title "Ausgleichsgerade"
+
+#Sinusspannung
+#plot "daten" index 2 using (($2)/1000):($1) title "Strom gegen Spannung", f(x) title "Ausgleichsgerade"
+
+#Leistung
+#plot "daten" index 0 using ($1/($2/1000)):($1*($2/1000)) title "Leistung gegen Widerstand", p(x) title "theoretische Leistungskurve"
+
+#plot f(x) title "r1=1,4m r2=1,4m" linecolor rgb "red", g(x) title "r1=1,4m r2=1,0m" linecolor rgb "green", 1 title "g1*g2=1" linecolor rgb "black"
+
+#-----Sonderkram-----#
+#set arrow from 0,-26 to 1.6,-26 lc 2 lw 3 front nohead
+
+
+
+#-----Zurücksetzen-----#
+
+unset logscale x
+unset logscale y
+
+unset terminal
+#replot
+#pause -1
